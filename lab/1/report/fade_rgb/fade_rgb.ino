@@ -1,6 +1,6 @@
-int led_R = 11;
-int led_G = 10;
-int led_B = 9;
+int led_R = 1;
+int led_G = 2;
+int led_B = 3;
 int i = 0;
 
 
