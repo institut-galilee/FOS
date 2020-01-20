@@ -131,7 +131,7 @@ void sendEmail(){
 
   smtpData.setSubject("ESP32 SMTP Mail Sending Test");
 
-  smtpData.setMessage("<div style=\"color:#ff0000;font-size:20px;\">Hello World! - From ESP32</div>", true);
+  smtpData.setMessage("<div style=\"color:#ff0000;font-size:20px;\">Un intrus a été detecté, une photo a été jointe a ce mail. - From ESP32</div>", true);
 
   smtpData.addRecipient(DESTINATAIRE);
 
