@@ -4,7 +4,7 @@
 
 #include "image.h"
 
-#define PIN_ALERT 23
+#define PIN_ALERT 16
 
 const char* WIFI_SSID = "salut";
 const char* WIFI_PASSWORD = "salutsalut";
@@ -60,12 +60,9 @@ void loop()
   }*/
 
   if(digitalRead(PIN_ALERT) == HIGH){ //Reception du signal d'alerte
+    Serial.println("Signal recu");
     sendEmail();
-  }else{
-    Serial.print("$");
   }
-
-  delay(5000);
     
 }
 

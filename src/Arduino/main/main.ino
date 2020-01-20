@@ -14,12 +14,15 @@
 #define PIN_LED_VERTE 6
 #define PIN_LED_ROUGE 5
 
+#define PIN_BUZZER 3
+
 MFRC522 rfid(SS_PIN, RST_PIN); // appel de la classe
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 // LiquidCrystal_I2C lcd(0x3F, 20, 4);
 
 bool sys_armed = false ;
+bool alarm_activated = false;
 
 String keyOk[5] = {"86 5e a1 1f", "", "", "", ""};
 
@@ -65,7 +68,7 @@ void closeLCD()
 void sendMail(){
     // Envoyer un mail au proprietaire via l'esp32
     digitalWrite(PIN_ALERT,HIGH);
-    delay(10000);
+    //delay(30);
     digitalWrite(PIN_ALERT,LOW);
     Serial.println("Alert send");
 }
@@ -74,6 +77,7 @@ void intrusion()
 {
     // processus lancer lors d'une intrusion
     sendText("Intrusion !");
+    alarm_activated = true;
     sendMail();
 }
 
@@ -171,6 +175,8 @@ void accessGranted()
 
     sys_armed = false;
 
+    buzzer_off();
+
     delay(2000);
     digitalWrite(PIN_LED_VERTE, LOW);
 }
@@ -187,6 +193,23 @@ void accessDenied()
 
     delay(2000);
     digitalWrite(PIN_LED_ROUGE, LOW);
+}
+
+void buzzer_on(){
+  for(int i = 0; i <= 2000; i+=40){
+    tone(PIN_BUZZER, i); // Envoie un signal de frequence i dans le pin
+    delay(30);
+  }
+
+  for(int j = 2000; j > 0; j-=40){
+    tone(PIN_BUZZER, j); // Envoie un signal de frequence i dans le pin
+    delay(30);
+  }
+}
+
+void buzzer_off(){
+  noTone(PIN_BUZZER);
+  alarm_activated = false;
 }
 
 void loop()
@@ -210,9 +233,10 @@ void loop()
             intrusion();
         }
     }
-    else
-    {}
 
+    if(alarm_activated and sys_armed){
+      buzzer_on();
+    }
     delay(200);
 
     //sendMail();
